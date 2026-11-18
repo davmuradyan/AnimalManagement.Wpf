@@ -23,30 +23,34 @@
                     <TextBlock Text="Join Animal Management"
                                Foreground="Gray"
                                HorizontalAlignment="Center"
-                               Margin="0,0,0,25"/>
+                               Margin="0,0,0,20"/>
 
                     <TextBlock Text="Name" Margin="0,0,0,5"/>
                     <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
                              Height="36"
                              Padding="8"
-                             Margin="0,0,0,12"/>
+                             Margin="0,0,0,10"/>
 
                     <TextBlock Text="Surname" Margin="0,0,0,5"/>
                     <TextBox Text="{Binding Surname, UpdateSourceTrigger=PropertyChanged}"
                              Height="36"
                              Padding="8"
-                             Margin="0,0,0,12"/>
+                             Margin="0,0,0,10"/>
 
                     <TextBlock Text="Username" Margin="0,0,0,5"/>
                     <TextBox Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}"
                              Height="36"
                              Padding="8"
-                             Margin="0,0,0,12"/>
+                             Margin="0,0,0,10"/>
 
                     <TextBlock Text="Password" Margin="0,0,0,5"/>
+                    <TextBlock Text="{Binding PasswordError}"
+                               Foreground="Red"
+                               TextWrapping="Wrap"
+                               Margin="0,0,0,0"/>
                     <PasswordBox Height="36"
                                  Padding="8"
-                                 Margin="0,0,0,12"
+                                 Margin="0,0,0,10"
                                  behaviors:PasswordBoxHelper.BoundPassword="{Binding Password, Mode=TwoWay}"/>
 
                     <TextBlock Text="Repeat Password" Margin="0,0,0,5"/>

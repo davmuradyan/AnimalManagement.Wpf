@@ -1,4 +1,5 @@
 ﻿using System.Net.Http;
+using System.Text.RegularExpressions;
 using AnimalManagement.Wpf.Models.Requests;
 using AnimalManagement.Wpf.Services.Interfaces;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -15,6 +16,10 @@ public partial class RegisterViewModel(
     private bool isLoading;
     
     [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(RegisterCommand))]
+    private bool allowRegister;
+    
+    [ObservableProperty]
     private string name = string.Empty;
 
     [ObservableProperty]
@@ -25,12 +30,29 @@ public partial class RegisterViewModel(
 
     [ObservableProperty]
     private string password = string.Empty;
-
+    
+    [ObservableProperty]
+    private string passwordError = string.Empty;
+    
     [ObservableProperty]
     private string repeatPassword = string.Empty;
 
-    private bool CanRegister() => !IsLoading;
+    private bool CanRegister() => !IsLoading && allowRegister;
 
+    partial void OnPasswordChanged(string value)
+    {
+        if (Regex.IsMatch(value, @"[\s\p{C}]") || Regex.IsMatch(value, @"[\p{L}-[A-Za-z]]"))
+        {
+            PasswordError = "Password contains an invalid character.";
+            allowRegister = false;
+        }
+        else
+        {
+            PasswordError = "";
+            allowRegister = true;
+        }
+    }
+    
     [RelayCommand(CanExecute = nameof(CanRegister))]
     private async Task RegisterAsync()
     {
