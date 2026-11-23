@@ -6,6 +6,5 @@ public interface INavigationService : INotifyPropertyChanged
 {
     object? CurrentViewModel { get; }
 
-    void NavigateTo<TViewModel>()
-        where TViewModel : class;
+    void NavigateTo<TViewModel>() where TViewModel : class;
 }

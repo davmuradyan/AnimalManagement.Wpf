@@ -2,6 +2,7 @@
 using System.Net.Http;
 using System.Net.Http.Headers;
 using AnimalManagement.Wpf.Infrastructure.Authentication;
+using AnimalManagement.Wpf.Infrastructure.Translations;
 using AnimalManagement.Wpf.Models.Requests;
 using AnimalManagement.Wpf.Models.Responses;
 using AnimalManagement.Wpf.Services.Interfaces;
@@ -9,44 +10,45 @@ using AnimalManagement.Wpf.Services.Interfaces;
 namespace AnimalManagement.Wpf.Services.Implementations;
 
 public sealed class TranslationService(
-    HttpClient httpClient,
-    TokenStore tokenStore,
+    HttpClient client, 
+    TokenStore tokenStore, 
+    TranslationStore translationStore, 
     IAuthService authService) : ITranslationService
 {
-    public async Task<GetAllTranslationsResponse> GetAllTranslationsAsync(int languageCode, CancellationToken ct = default)
+    public async Task GetAllTranslations(int languageCode)
     {
-        if (string.IsNullOrWhiteSpace(tokenStore.AccessToken))
-            throw new InvalidOperationException("Authentication token is missing.");
+        if (tokenStore.AccessToken is null)
+            throw new InvalidOperationException("No access token provided");
+        
+        client.DefaultRequestHeaders.Authorization =
+            new AuthenticationHeaderValue("Bearer", tokenStore.AccessToken);
 
-        using var response = await SendRequestAsync(languageCode, ct);
-
-        if (response.StatusCode == HttpStatusCode.Unauthorized)
+        try
         {
-            var authResponse = await authService.RotateAsync(new RotateRefreshTokenRequest(tokenStore.RefreshToken!), ct);
+            var response = await client.GetAsync("translation?language=" + languageCode);
+            if (!response.IsSuccessStatusCode)
+            {
+                if (response.StatusCode == HttpStatusCode.Unauthorized && tokenStore.RefreshToken is not null)
+                {
+                    await authService.RotateAsync(new RotateRefreshTokenRequest(tokenStore.RefreshToken));
+                }
+            }
+            // TODO: handle later
+        
+            var translationsResponse = await response.Content.ReadFromJsonAsync<GetAllTranslationsResponse>();
 
-            tokenStore.SetToken(authResponse.AccessToken, authResponse.RefreshToken);
-
-            using var retryResponse = await SendRequestAsync(languageCode, ct);
-
-            retryResponse.EnsureSuccessStatusCode();
-
-            return await retryResponse.Content
-                       .ReadFromJsonAsync<GetAllTranslationsResponse>(cancellationToken: ct)
-                        ?? throw new InvalidOperationException("Empty response.");
+            translationStore.SelectedLanguageCode = languageCode;
+            translationStore.Translations = translationsResponse?.Translations ?? new();
         }
-
-        response.EnsureSuccessStatusCode();
-
-        return await response.Content
-                   .ReadFromJsonAsync<GetAllTranslationsResponse>(cancellationToken: ct)
-                    ?? throw new InvalidOperationException("Empty response.");
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
     }
-    private async Task<HttpResponseMessage> SendRequestAsync(int languageCode, CancellationToken ct)
+
+    public Task<GetEnumTypeTranslationsResponse> GetEnumTypeTranslations(string type, int languageCode)
     {
-        using var request = new HttpRequestMessage(HttpMethod.Get, $"api/v1/translation?language={languageCode}");
-
-        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", tokenStore.AccessToken);
-
-        return await httpClient.SendAsync(request, ct);
+        throw new NotImplementedException();
     }
 }

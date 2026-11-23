@@ -43,7 +43,7 @@ public partial class LoginViewModel(
 
             var response = await authService.LoginAsync(request);
 
-            await Task.Delay(3000);
+            await Task.Delay(500);
             tokenStore.SetToken(response.AccessToken, response.RefreshToken);
 
             navigationService.NavigateTo<DashboardViewModel>();

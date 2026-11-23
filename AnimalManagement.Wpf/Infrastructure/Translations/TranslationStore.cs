@@ -11,6 +11,11 @@ public partial class TranslationStore : ObservableObject
     [ObservableProperty]
     private Dictionary<string, List<EnumTranslationResponse>> translations = [];
 
-    public IReadOnlyList<EnumTranslationResponse> Languages =>
+    public List<EnumTranslationResponse> Languages =>
         Translations.TryGetValue("Language", out var languages) ? languages : [];
+
+    public void Clear()
+    {
+        Translations.Clear();
+    }
 }

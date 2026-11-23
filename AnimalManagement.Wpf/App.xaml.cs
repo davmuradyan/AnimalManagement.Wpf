@@ -12,7 +12,7 @@ namespace AnimalManagement.Wpf;
 public partial class App : Application
 {
     private readonly IHost _host;
-    private readonly string _baseUrl =  "https://localhost:7215/";
+    private readonly string _baseUrl =  "https://localhost:7215/api/";
 
     public App()
     {
@@ -29,14 +29,26 @@ public partial class App : Application
                 services.AddTransient<LoginViewModel>();
                 services.AddTransient<RegisterViewModel>();
                 services.AddTransient<DashboardViewModel>();
+                services.AddTransient<UserViewModel>();
+                services.AddTransient<AnimalControlViewModel>();
                 
                 // Base URL
                 services.AddHttpClient<IAuthService, AuthService>(client =>
                 {
                     client.BaseAddress = new Uri(_baseUrl);
                 });
-
+                
+                services.AddHttpClient<IUserService, UserService>(client =>
+                {
+                    client.BaseAddress = new Uri(_baseUrl);
+                });
+                
                 services.AddHttpClient<ITranslationService, TranslationService>(client =>
+                {
+                    client.BaseAddress = new Uri(_baseUrl);
+                });
+                
+                services.AddHttpClient<IAnimalService, AnimalService>(client =>
                 {
                     client.BaseAddress = new Uri(_baseUrl);
                 });
@@ -53,13 +65,11 @@ public partial class App : Application
     {
         await _host.StartAsync();
 
-        var navigationService =
-            _host.Services.GetRequiredService<INavigationService>();
+        var navigationService = _host.Services.GetRequiredService<INavigationService>();
 
         navigationService.NavigateTo<LoginViewModel>();
 
-        var mainWindow =
-            _host.Services.GetRequiredService<MainWindow>();
+        var mainWindow = _host.Services.GetRequiredService<MainWindow>();
 
         mainWindow.Show();
 

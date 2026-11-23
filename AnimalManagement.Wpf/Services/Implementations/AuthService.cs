@@ -9,7 +9,7 @@ public sealed class AuthService(HttpClient httpClient) : IAuthService
 {
     public async Task<AuthResponse> LoginAsync(LoginRequest request, CancellationToken cancellationToken = default)
     {
-        var response = await httpClient.PostAsJsonAsync("api/v1/user/login", request, cancellationToken);
+        var response = await httpClient.PostAsJsonAsync("user/login", request, cancellationToken);
 
         response.EnsureSuccessStatusCode();
 
@@ -22,7 +22,7 @@ public sealed class AuthService(HttpClient httpClient) : IAuthService
     public async Task RegisterAsync(RegisterRequest request, CancellationToken cancellationToken = default)
     {
         var response = await httpClient.PostAsJsonAsync(
-            "api/v1/user/register",
+            "user/register",
             request,
             cancellationToken);
 
@@ -31,12 +31,11 @@ public sealed class AuthService(HttpClient httpClient) : IAuthService
 
     public async Task<AuthResponse> RotateAsync(RotateRefreshTokenRequest request, CancellationToken cancellationToken = default)
     {
-        var response = await httpClient.PostAsJsonAsync("api/v1/user/rotate", request, cancellationToken);
+        var response = await httpClient.PostAsJsonAsync("user/rotate", request, cancellationToken);
         
         response.EnsureSuccessStatusCode();
 
-        var authResponse = await response.Content.ReadFromJsonAsync<AuthResponse>(
-            cancellationToken: cancellationToken);
+        var authResponse = await response.Content.ReadFromJsonAsync<AuthResponse>(cancellationToken: cancellationToken);
 
         return authResponse ?? throw new InvalidOperationException("The server returned an empty authentication response.");
     }

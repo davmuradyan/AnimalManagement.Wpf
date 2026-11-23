@@ -15,8 +15,7 @@ public partial class MainWindow : Window
         {
             if (e.PropertyName == nameof(navigationService.CurrentViewModel))
             {
-                Console.WriteLine(
-                    $"Current DataContext: {navigationService.CurrentViewModel?.GetType().FullName}");
+                Console.WriteLine($"Current DataContext: {navigationService.CurrentViewModel?.GetType().FullName}");
             }
         };
     }

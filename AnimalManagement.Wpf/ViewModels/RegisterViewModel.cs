@@ -37,19 +37,19 @@ public partial class RegisterViewModel(
     [ObservableProperty]
     private string repeatPassword = string.Empty;
 
-    private bool CanRegister() => !IsLoading && allowRegister;
+    private bool CanRegister() => !IsLoading && AllowRegister;
 
     partial void OnPasswordChanged(string value)
     {
         if (Regex.IsMatch(value, @"[\s\p{C}]") || Regex.IsMatch(value, @"[\p{L}-[A-Za-z]]"))
         {
             PasswordError = "Password contains an invalid character.";
-            allowRegister = false;
+            AllowRegister = false;
         }
         else
         {
             PasswordError = "";
-            allowRegister = true;
+            AllowRegister = true;
         }
     }
     
