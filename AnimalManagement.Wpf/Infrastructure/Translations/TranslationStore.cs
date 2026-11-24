@@ -13,9 +13,17 @@ public partial class TranslationStore : ObservableObject
 
     public List<EnumTranslationResponse> Languages =>
         Translations.TryGetValue("Language", out var languages) ? languages : [];
+    
+    public List<EnumTranslationResponse> Colors =>
+        Translations.TryGetValue("Color", out var colors) ? colors : [];
+    
+    public List<EnumTranslationResponse> Genders =>
+        Translations.TryGetValue("Gender", out var colors) ? colors : [];
 
-    public void Clear()
+    public event EventHandler TranslationsChanged;
+
+    partial void OnTranslationsChanged(Dictionary<string, List<EnumTranslationResponse>>? oldValue, Dictionary<string, List<EnumTranslationResponse>> newValue)
     {
-        Translations.Clear();
+        TranslationsChanged?.Invoke(this, EventArgs.Empty);
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System.Net.Http;
 using System.Net.Http.Headers;
 using AnimalManagement.Wpf.Infrastructure.Authentication;
+using AnimalManagement.Wpf.Models.Dtos;
 using AnimalManagement.Wpf.Models.Requests;
 using AnimalManagement.Wpf.Models.Responses;
 using AnimalManagement.Wpf.Services.Interfaces;
@@ -26,6 +27,31 @@ public class AnimalService(TokenStore tokenStore, HttpClient client) : IAnimalSe
             var animalResponse = await response.Content.ReadFromJsonAsync<GetAllAnimalsResponse>();
 
             return animalResponse ?? new GetAllAnimalsResponse([], -1);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+    }
+
+    public async Task<AnimalDto?> CreateAsync(CreateAnimalRequest request)
+    {
+        if (tokenStore.AccessToken is null)
+            throw new InvalidOperationException("No access token provided");
+        
+        client.DefaultRequestHeaders.Authorization =
+            new AuthenticationHeaderValue("Bearer", tokenStore.AccessToken);
+        
+        try
+        {
+            var response = await client.PostAsJsonAsync("animal", request);
+            if (!response.IsSuccessStatusCode) {}
+            // TODO: handle later
+        
+            var animalResponse = await response.Content.ReadFromJsonAsync<AnimalDto>();
+
+            return animalResponse;
         }
         catch (Exception e)
         {

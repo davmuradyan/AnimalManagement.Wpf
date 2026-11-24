@@ -1,0 +1,64 @@
+﻿<Window x:Class="AnimalManagement.Wpf.Views.CreateAnimalWindowView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        mc:Ignorable="d"
+        Title="CreateAnimalWindow" Height="450" Width="800">
+    <Grid
+        HorizontalAlignment="Center"
+        VerticalAlignment="Center">
+        
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <StackPanel>
+                    <TextBlock Text="Create new animal record"
+                               FontSize="26"
+                               FontWeight="Bold"
+                               HorizontalAlignment="Center"
+                               Margin="0,0,0,8"/>
+
+                    <TextBlock Text="We will manage your cow."
+                               Foreground="Gray"
+                               HorizontalAlignment="Center"
+                               Margin="0,0,0,20"/>
+
+                    <TextBlock Text="Name" Margin="0,0,0,5"/>
+                    <TextBox Text="{Binding Name}"
+                             Height="36"
+                             Padding="8"
+                             Margin="0,0,0,10"/>
+
+                    <TextBlock Text="Age" Margin="0,0,0,5"/>
+                    <TextBox Text="{Binding Age}"
+                             Height="36"
+                             Padding="8"
+                             Margin="0,0,0,10"/>
+
+                    <TextBlock Text="Weight" Margin="0,0,0,5"/>
+                    <TextBox Text="{Binding Weight}"
+                             Height="36"
+                             Padding="8"
+                             Margin="0,0,0,10"/>
+                    
+                    <TextBlock Text="Color" Margin="0,0,0,5"/>
+                    <ComboBox Margin="0,0,0,5"
+                              ItemsSource="{Binding Colors}"
+                              SelectedItem="{Binding SelectedColor}"
+                              DisplayMemberPath="Translation"></ComboBox>
+                    
+                    <TextBlock Text="Gender" Margin="0,0,0,5"/>
+                    <ComboBox Margin="0,0,0,20"
+                              ItemsSource="{Binding Genders}"
+                              SelectedItem="{Binding SelectedGender}"
+                              DisplayMemberPath="Translation"></ComboBox>
+
+                    <Button Content="Create animal record"
+                            Height="42"
+                            FontWeight="SemiBold"
+                            Command="{Binding CreateAnimalCommand}"
+                            IsEnabled="{Binding CanBeCreated}"/>
+                </StackPanel>
+            </ScrollViewer>
+        
+    </Grid>
+</Window>

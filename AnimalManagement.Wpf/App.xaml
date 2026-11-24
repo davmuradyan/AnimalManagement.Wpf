@@ -25,6 +25,10 @@
         <DataTemplate DataType="{x:Type vm:AnimalControlViewModel}">
             <views:AnimalControlView />
         </DataTemplate>
+        
+        <DataTemplate DataType="{x:Type vm:CreateAnimalWindowViewModel}">
+            <views:CreateAnimalWindowView />
+        </DataTemplate>
 
     </Application.Resources>
 </Application>

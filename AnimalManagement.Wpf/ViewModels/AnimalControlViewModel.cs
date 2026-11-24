@@ -5,6 +5,7 @@ using AnimalManagement.Wpf.Models.Dtos;
 using AnimalManagement.Wpf.Models.Requests;
 using AnimalManagement.Wpf.Models.Responses;
 using AnimalManagement.Wpf.Services.Interfaces;
+using AnimalManagement.Wpf.Views;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
@@ -150,5 +151,16 @@ public partial class AnimalControlViewModel : BaseViewModel
     void NavigateToDashboard()
     {
         _navigationService.NavigateTo<DashboardViewModel>();
+    }
+    
+    [RelayCommand]
+    private void NavigateToCreateAnimal()
+    {
+        var window = new CreateAnimalWindowView
+        {
+            DataContext = new CreateAnimalWindowViewModel(_translationStore, _animalService)
+        };
+        
+        window.Show();
     }
 }

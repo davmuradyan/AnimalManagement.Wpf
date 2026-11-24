@@ -31,6 +31,7 @@ public partial class App : Application
                 services.AddTransient<DashboardViewModel>();
                 services.AddTransient<UserViewModel>();
                 services.AddTransient<AnimalControlViewModel>();
+                services.AddTransient<CreateAnimalWindowViewModel>();
                 
                 // Base URL
                 services.AddHttpClient<IAuthService, AuthService>(client =>
